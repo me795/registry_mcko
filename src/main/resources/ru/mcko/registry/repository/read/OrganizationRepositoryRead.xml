@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.mcko.registry.repository.read.OrganizationRepositoryRead">
+
+    <resultMap id="organizationMap" type="ru.mcko.registry.entity.Organization">
+        <id column="org_id" property="id"/>
+        <result column="org_short_name" property="shortName"/>
+        <result column="org_name" property="name"/>
+        <result column="org_opf" property="organizationOPF"/>
+        <result column="org_type" property="organizationType"/>
+        <result column="org_ogrn" property="ogrn"/>
+        <result column="org_inn" property="inn"/>
+        <result column="org_activity_started_at" property="activityStartedAt"/>
+        <result column="org_activity_finished_at" property="activityFinishedAt"/>
+        <result column="org_created_at" property="createdAt"/>
+        <result column="org_updated_at" property="updatedAt"/>
+        <result column="org_deleted_at" property="deletedAt"/>
+    </resultMap>
+
+    <resultMap id="organizationFullMap" type="ru.mcko.registry.entity.Organization">
+        <id column="org_id" property="id"/>
+        <result column="org_short_name" property="shortName"/>
+        <result column="org_name" property="name"/>
+        <result column="org_opf" property="organizationOPF"/>
+        <result column="org_type" property="organizationType"/>
+        <result column="org_ogrn" property="ogrn"/>
+        <result column="org_inn" property="inn"/>
+        <result column="org_activity_started_at" property="activityStartedAt"/>
+        <result column="org_activity_finished_at" property="activityFinishedAt"/>
+        <result column="org_created_at" property="createdAt"/>
+        <result column="org_updated_at" property="updatedAt"/>
+        <result column="org_deleted_at" property="deletedAt"/>
+        <collection property="stampList" resultMap="stampMap"/>
+        <collection property="organizationDelegateList" resultMap="organizationDelegateMap"/>
+    </resultMap>
+
+    <resultMap id="stampMap" type="ru.mcko.registry.entity.Stamp">
+        <id column="stamp_id" property="id"/>
+        <result column="stamp_link" property="link"/>
+        <result column="stamp_activity_started_at" property="activityStartedAt"/>
+        <result column="stamp_activity_finished_at" property="activityFinishedAt"/>
+        <result column="stamp_created_at" property="createdAt"/>
+        <result column="stamp_updated_at" property="updatedAt"/>
+        <result column="stamp_deleted_at" property="deletedAt"/>
+        <collection property="organizationDelegateByStampList" resultMap="organizationDelegateMap"/>
+    </resultMap>
+
+    <resultMap id="organizationDelegateMap" type="ru.mcko.registry.entity.OrganizationDelegate">
+        <id column="od_id" property="id"/>
+        <result column="od_position" property="position"/>
+        <result column="od_order_document_type" property="orderDocumentType"/>
+        <result column="od_order_document_num" property="orderDocumentNum"/>
+        <result column="od_order_document_date" property="orderDocumentDate"/>
+        <result column="od_activity_started_at" property="activityStartedAt"/>
+        <result column="od_activity_finished_at" property="activityFinishedAt"/>
+        <result column="od_created_at" property="createdAt"/>
+        <result column="od_updated_at" property="updatedAt"/>
+        <result column="od_deleted_at" property="deletedAt"/>
+        <association property="delegate" resultMap="delegateMap"/>
+        <collection property="documentTypeList" resultMap="docTypeMap"/>
+    </resultMap>
+
+    <resultMap id="delegateMap" type="ru.mcko.registry.entity.Delegate">
+        <id column="d_id" property="id"/>
+        <result column="d_surname" property="surname"/>
+        <result column="d_name" property="name"/>
+        <result column="d_middle_name" property="middleName"/>
+        <result column="d_signature_link" property="signatureLink"/>
+    </resultMap>
+
+    <resultMap id="docTypeMap" type="ru.mcko.registry.entity.DocumentType">
+        <id column="dt_id" property="id"/>
+        <result column="dt_name" property="name"/>
+    </resultMap>
+
+    <select id="list" resultMap="organizationMap">
+        SELECT
+        organizations.id AS org_id,
+        organizations.short_name AS org_short_name,
+        organizations.name AS org_name,
+        organizations.organization_opf AS org_opf,
+        organizations.organization_type AS org_type,
+        organizations.ogrn AS org_ogrn,
+        organizations.inn AS org_inn,
+        organizations.activity_started_at AS org_activity_started_at,
+        organizations.activity_finished_at AS org_activity_finished_at,
+        organizations.created_at AS created_at,
+        organizations.updated_at AS updated_at,
+        organizations.deleted_at AS deleted_at
+        FROM
+        organizations
+        WHERE 1=1
+        AND organizations.deleted_at IS NULL
+        <if test="params.searchValue != null">
+            and (lower(short_name) like #{params.searchValue}
+            or lower(name) like #{params.searchValue})
+        </if>
+        <if test='"id".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY id
+        </if>
+        <if test='"short_name".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY short_name
+        </if>
+        <if test='"name".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY name
+        </if>
+        <if test='"organization_opf".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY organization_opf
+        </if>
+        <if test='"organization_type".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY organization_type
+        </if>
+        <if test='"ogrn".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY ogrn
+        </if>
+        <if test='"inn".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY inn
+        </if>
+        <if test='"activity_started_at".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY activity_started_at
+        </if>
+        <if test='"activity_finished_at".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY activity_finished_at
+        </if>
+        <if test='"updated_at".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY updated_at
+        </if>
+        <if test='"deleted_at".equalsIgnoreCase(params.orderColumn)'>
+            ORDER BY deleted_at
+        </if>
+        <if test="params.asc != null">
+            ASC
+        </if>
+        <if test="params.asc == null">
+            DESC
+        </if>
+        <if test="params.limit != null">
+            LIMIT #{params.limit}
+        </if>
+        <if test="params.offset != null">
+            OFFSET #{params.offset}
+        </if>;
+    </select>
+
+    <select id="listByName" resultMap="organizationMap">
+        SELECT organizations.id                   AS org_id,
+               organizations.short_name           AS org_short_name,
+               organizations.name                 AS org_name,
+               organizations.organization_opf     AS org_opf,
+               organizations.organization_type    AS org_type,
+               organizations.ogrn                 AS org_ogrn,
+               organizations.inn                  AS org_inn,
+               organizations.activity_started_at  AS org_activity_started_at,
+               organizations.activity_finished_at AS org_activity_finished_at,
+               organizations.created_at           AS created_at,
+               organizations.updated_at           AS updated_at,
+               organizations.deleted_at           AS deleted_at
+        FROM organizations
+        WHERE 1 = 1
+          AND organizations.deleted_at IS NULL
+          AND (lower(organizations.name) LIKE #{searchValue}
+            OR lower(organizations.short_name) LIKE #{searchValue});
+    </select>
+
+    <select id="count" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM organizations
+        WHERE 1 = 1
+          AND organizations.deleted_at IS NULL
+          AND organizations.activity_finished_at IS NULL;
+    </select>
+
+    <select id="countAll" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM organizations
+        WHERE 1 = 1
+          AND organizations.deleted_at IS NULL;
+    </select>
+
+    <select id="countWithFilter" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM
+        organizations
+        WHERE 1=1
+        AND deleted_at IS NULL
+        <if test="params.searchValue != null">
+            and (lower(short_name) like #{params.searchValue}
+            or lower(name) like #{params.searchValue})
+        </if>;
+    </select>
+
+
+    <select id="getById" resultMap="organizationFullMap">
+        SELECT organizations.id                           AS org_id,
+               organizations.short_name                   AS org_short_name,
+               organizations.name                         AS org_name,
+               organizations.organization_opf             AS org_opf,
+               organizations.organization_type            AS org_type,
+               organizations.ogrn                         AS org_ogrn,
+               organizations.inn                          AS org_inn,
+               organizations.activity_started_at          AS org_activity_started_at,
+               organizations.activity_finished_at         AS org_activity_finished_at,
+               organizations.created_at                   AS created_at,
+               organizations.updated_at                   AS updated_at,
+               organizations.deleted_at                   AS deleted_at,
+               stamps.id                                  AS stamp_id,
+               stamps.stamp_link                          AS stamp_link,
+               stamps.activity_started_at                 AS stamp_activity_started_at,
+               stamps.activity_finished_at                AS stamp_activity_finished_at,
+               stamps.created_at                          AS stamp_created_at,
+               stamps.updated_at                          AS stamp_updated_at,
+               stamps.deleted_at                          AS stamp_deleted_at,
+               organization_delegate.id                   AS od_id,
+               organization_delegate.position             AS od_position,
+               organization_delegate.order_document_type  AS od_order_document_type,
+               organization_delegate.order_document_num   AS od_order_document_num,
+               organization_delegate.order_document_date  AS od_order_document_date,
+               organization_delegate.activity_started_at  AS od_activity_started_at,
+               organization_delegate.activity_finished_at AS od_activity_finished_at,
+               organization_delegate.created_at           AS od_created_at,
+               organization_delegate.updated_at           AS od_updated_at,
+               organization_delegate.deleted_at           AS od_deleted_at,
+               document_type.id                           AS dt_id,
+               document_type.name                         AS dt_name,
+               delegates.id                               AS d_id,
+               delegates.surname                          AS d_surname,
+               delegates.name                             AS d_name,
+               delegates.middle_name                      AS d_middle_name,
+               delegates.signature_link                   AS d_signature_link
+        FROM organizations
+                 LEFT JOIN stamps ON stamps.organization_id = organizations.id
+                 LEFT JOIN organization_delegate ON organization_delegate.organization_id = organizations.id
+                 LEFT JOIN delegates ON organization_delegate.delegate_id = delegates.id
+                 LEFT JOIN organization_delegate_document_type
+                           ON organization_delegate_document_type.organization_delegate_id = organization_delegate.id
+                 LEFT JOIN document_type ON organization_delegate_document_type.document_type_id = document_type.id
+        WHERE 1=1
+          AND organizations.deleted_at IS NULL
+          AND organization_delegate.deleted_at IS NULL
+          AND stamps.deleted_at IS NULL
+          AND document_type.deleted_at IS NULL
+          AND organizations.id = #{id}
+          ORDER BY stamps.activity_started_at, organization_delegate.activity_started_at;
+    </select>
+
+    <select id="listFull" resultMap="organizationFullMap">
+        SELECT
+        organizations.id AS org_id,
+        organizations.short_name AS org_short_name,
+        organizations.name AS org_name,
+        organizations.organization_opf AS org_opf,
+        organizations.organization_type AS org_type,
+        organizations.ogrn AS org_ogrn,
+        organizations.inn AS org_inn,
+        organizations.activity_started_at AS org_activity_started_at,
+        organizations.activity_finished_at AS org_activity_finished_at,
+        organizations.created_at AS created_at,
+        organizations.updated_at AS updated_at,
+        organizations.deleted_at AS deleted_at,
+        stamps.id AS stamp_id,
+        stamps.stamp_link AS stamp_link,
+        stamps.activity_started_at AS stamp_activity_started_at,
+        stamps.activity_finished_at AS stamp_activity_finished_at,
+        stamps.created_at AS stamp_created_at,
+        stamps.updated_at AS stamp_updated_at,
+        stamps.deleted_at AS stamp_deleted_at,
+        organization_delegate.id AS od_id,
+        organization_delegate.position AS od_position,
+        organization_delegate.order_document_type AS od_order_document_type,
+        organization_delegate.order_document_num AS od_order_document_num,
+        organization_delegate.order_document_date AS od_order_document_date,
+        organization_delegate.activity_started_at AS od_activity_started_at,
+        organization_delegate.activity_finished_at AS od_activity_finished_at,
+        organization_delegate.created_at AS od_created_at,
+        organization_delegate.updated_at AS od_updated_at,
+        organization_delegate.deleted_at AS od_deleted_at,
+        document_type.id AS dt_id,
+        document_type.name AS dt_name,
+        delegates.id AS d_id,
+        delegates.surname AS d_surname,
+        delegates.name AS d_name,
+        delegates.middle_name AS d_middle_name,
+        delegates.signature_link AS d_signature_link
+        FROM
+        organizations
+        LEFT JOIN stamps ON stamps.organization_id = organizations.id
+        LEFT JOIN organization_delegate ON organization_delegate.organization_id = organizations.id
+        AND (organization_delegate.activity_started_at BETWEEN stamps.activity_started_at AND
+        stamps.activity_finished_at
+        OR organization_delegate.activity_finished_at BETWEEN stamps.activity_started_at AND stamps.activity_finished_at
+        OR (organization_delegate.activity_started_at >= stamps.activity_started_at AND stamps.activity_finished_at IS
+        NULL))
+        LEFT JOIN delegates ON organization_delegate.delegate_id = delegates.id
+        LEFT JOIN organization_delegate_document_type ON organization_delegate_document_type.organization_delegate_id =
+        organization_delegate.id
+        LEFT JOIN document_type ON organization_delegate_document_type.document_type_id = document_type.id
+        WHERE 1=1
+        AND organizations.deleted_at IS NULL
+        AND organization_delegate.deleted_at IS NULL
+        AND stamps.deleted_at IS NULL
+        AND document_type.deleted_at IS NULL
+        <if test="params.delegateId != null">
+            AND delegates.id = #{params.delegateId}
+        </if>
+        <if test="params.organizationId != null">
+            AND organizations.id = #{params.organizationId}
+        </if>
+        <if test="params.date != null">
+            AND #{params.date} BETWEEN stamps.activity_started_at AND stamps.activity_finished_at
+        </if>
+        ORDER BY organizations.activity_started_at, stamps.activity_started_at, organization_delegate.activity_started_at;
+        LIMIT 50;
+    </select>
+
+    <select id="countFull" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM organizations
+                 LEFT JOIN stamps ON stamps.organization_id = organizations.id
+                 LEFT JOIN organization_delegate ON organization_delegate.organization_id = organizations.id
+                 LEFT JOIN delegates ON organization_delegate.delegate_id = delegates.id
+                 LEFT JOIN organization_delegate_document_type
+                           ON organization_delegate_document_type.organization_delegate_id = organization_delegate.id
+                 LEFT JOIN document_type ON organization_delegate_document_type.document_type_id = document_type.id
+        WHERE 1 = 1
+          AND organizations.deleted_at IS NULL
+          AND organization_delegate.deleted_at IS NULL
+          AND stamps.deleted_at IS NULL
+          AND document_type.deleted_at IS NULL;
+    </select>
+
+
+</mapper>

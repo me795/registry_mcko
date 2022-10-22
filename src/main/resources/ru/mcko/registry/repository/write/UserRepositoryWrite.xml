@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.mcko.registry.repository.write.UserRepositoryWrite">
+
+    <select id="create" parameterType="ru.mcko.registry.entity.User" resultType="java.lang.Integer">
+        INSERT INTO users (email, name, hashpass, created_at)
+        VALUES (#{email}, #{name}, #{password}, NOW()) RETURNING id;
+    </select>
+
+    <update id="update" parameterType="ru.mcko.registry.entity.User">
+        UPDATE
+        users
+        SET
+        <if test="password != null">
+            hashpass = #{password},
+        </if>
+        name = #{name},
+        email = #{email},
+        is_blocked = #{isBlocked},
+        updated_at = NOW()
+        WHERE 1 = 1
+        AND id = #{id};
+    </update>
+
+    <delete id="delete">
+        update users
+        set
+            deleted_at = NOW()
+        WHERE 1 = 1
+          AND id = #{userId}
+    </delete>
+
+    <insert id="addRole">
+        INSERT INTO user_role (user_id, role_id)
+        VALUES (#{userId}, #{roleId});
+    </insert>
+
+    <delete id="deleteAllRoles">
+        DELETE
+        FROM user_role
+        WHERE 1 = 1
+          AND user_id = #{userId}
+    </delete>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.mcko.registry.repository.write.OrganizationRepositoryWrite">
+
+    <select id="create" parameterType="ru.mcko.registry.entity.Organization" resultType="java.lang.Integer">
+        insert into organizations (short_name, name, organization_opf, organization_type,
+                                   ogrn, inn, activity_started_at,
+                                   activity_finished_at, created_at)
+        values (#{shortName}, #{name}, #{organizationOPF},
+                #{organizationType}, #{ogrn}, #{inn},
+                #{activityStartedAt}, #{activityFinishedAt},NOW()) RETURNING id;
+    </select>
+
+    <update id="update" parameterType="ru.mcko.registry.entity.Organization">
+        update organizations
+        set
+            short_name = #{shortName},
+            name = #{name},
+            organization_opf = #{organizationOPF},
+            organization_type = #{organizationType},
+            ogrn = #{ogrn},
+            inn = #{inn},
+            activity_started_at = #{activityStartedAt},
+            <if test="activityFinishedAt != null">
+                activity_finished_at = #{activityFinishedAt},
+            </if>
+            updated_at = NOW()
+        where 1 = 1
+          and id = #{id};
+    </update>
+
+    <delete id="delete">
+        update organizations
+        set
+            deleted_at = NOW()
+        WHERE 1 = 1
+          AND id = #{organizationId}
+    </delete>
+
+
+</mapper>

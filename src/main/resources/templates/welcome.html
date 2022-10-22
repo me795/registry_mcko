@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" content="text/html;" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::header (${scriptsVersion})"></head>
+<body>
+
+<aside th:replace="menu::left_panel"></aside>
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <header th:replace="menu::top_panel"></header>
+    <!-- Content -->
+    <div class="content">
+        <!-- Animated -->
+        <div class="animated fadeIn">
+            <!-- Widgets  -->
+            <div class="row">
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-3">
+                                    <i class="pe-7s-culture"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text"><span class="count" th:text="${allOrganizationsCount}">2986</span></div>
+                                        <div class="stat-heading">Всего организаций</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-3">
+                                    <i class="pe-7s-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text"><span class="count" th:text="${allDelegatesCount}">3425</span></div>
+                                        <div class="stat-heading">Всего подписантов</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-1">
+                                    <i class="pe-7s-culture"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text"><span class="count" th:text="${activeOrganizationsCount}">349</span></div>
+                                        <div class="stat-heading">Активных организаций</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="stat-widget-five">
+                                <div class="stat-icon dib flat-color-1">
+                                    <i class="pe-7s-users"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="text-left dib">
+                                        <div class="stat-text"><span class="count" th:text="${activeDelegatesCount}">564</span></div>
+                                        <div class="stat-heading">Активных подписантов</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Widgets -->
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <footer  th:replace="menu::footer"></footer>
+</div>
+
+<!--            <th:block th:if="${#request.userPrincipal != null}">-->
+<!--                <form id="logoutForm" method="POST" action="logout">-->
+<!--                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+<!--                </form>-->
+
+<!--                <h2>Welcome to user_panel <th:block th:text="${#request.userPrincipal.name}"></th:block> | <a-->
+<!--                        onclick="document.forms['logoutForm'].submit()">Logout</a>-->
+<!--                </h2>-->
+<!--            </th:block>-->
+
+
+
+            <div th:replace="template::scripts (${scriptsVersion})"></div>
+</body>
+</html>

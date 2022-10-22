@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" content="text/html;" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::header (${scriptsVersion})"></head>
+<body>
+
+<aside th:replace="menu::left_panel"></aside>
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <header th:replace="menu::top_panel"></header>
+
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-inner">
+            <div class="row m-0">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1><a href="/delegates">Должностные лица</a></h1>
+                        </div>
+                    </div>
+                </div>
+                <!--                <div class="col-sm-8">-->
+                <!--                    <div class="page-header float-right">-->
+                <!--                        <div class="page-title">-->
+                <!--                            <ol class="breadcrumb text-right">-->
+                <!--                                <li><a href="#">Dashboard</a></li>-->
+                <!--                                <li><a href="#">Table</a></li>-->
+                <!--                                <li class="active">Data table</li>-->
+                <!--                            </ol>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <div class="animated fadeIn">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Редактирование карточки должностного лица</strong>
+                        </div>
+                        <div class="card-body card-block">
+                            <form id="saveDelegate" th:action="(${delegate.id} == null) ? '/delegate' : '/delegate/' + ${delegate.id}" method="put" class="">
+
+                                <div class="row form-group">
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="delegate-surname" class=" form-control-label">Фамилия</label><input type="text" id="delegate-surname" placeholder="Фамилия" th:value="${delegate?.surname}" class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="delegate-name" class=" form-control-label">Имя</label><input type="text" id="delegate-name" placeholder="Имя" th:value="${delegate?.name}" class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="delegate-middle-name" class=" form-control-label">Отчество</label><input type="text" id="delegate-middle-name" placeholder="Отчество"  th:value="${delegate?.middleName}" class="form-control"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="form-group">
+                                        <label class=" form-control-label" style="margin-left: 15px;">Подпись должностного лица</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div id="image-preview-1" class="image-preview">
+                                        <input type="hidden" id="delegate-signature-link" th:value="${delegate?.signatureLink}" class="form-control form-upload-img">
+                                        <label for="image-upload-1" id="image-label-1" class="image-label">Выберите изображение</label>
+                                        <input type="file" name="image" id="image-upload-1" class="image-upload" />
+                                    </div>
+                                </div>
+<!--                                <div class="row form-group">-->
+<!--                                    <div id="image-preview-2" class="image-preview">-->
+<!--                                        <input type="hidden" id="delegate-signature-link-2" class="form-control form-upload-img">-->
+<!--                                        <label for="image-upload-1" id="image-label-2" class="image-label">Выберите изображение</label>-->
+<!--                                        <input type="file" name="image" id="image-upload-2" class="image-upload" />-->
+<!--                                    </div>-->
+<!--                                </div>-->
+
+                                <div class="form-actions form-group">
+                                    <button type="submit" class="btn btn-success btn-sm save-button">
+                                        <i class="fa"></i>&nbsp;Сохранить</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div><!-- .animated -->
+    </div>
+    <div class="clearfix"></div>
+    <footer th:replace="menu::footer"></footer>
+</div>
+
+
+
+<div th:replace="template::scripts (${scriptsVersion})"></div>
+<script src="/assets/js/external/jquery.uploadPreview.js"></script>
+<script src="/assets/js/delegate.js"></script>
+
+</body>
+</html>

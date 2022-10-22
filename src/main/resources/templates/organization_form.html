@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" content="text/html;" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::header (${scriptsVersion})"></head>
+<body>
+
+<aside th:replace="menu::left_panel"></aside>
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <header th:replace="menu::top_panel"></header>
+
+    <div class="breadcrumbs">
+        <div class="breadcrumbs-inner">
+            <div class="row m-0">
+                <div class="col-sm-4">
+                    <div class="page-header float-left">
+                        <div class="page-title">
+                            <h1><a href="/organizations">Оганизации</a></h1>
+                        </div>
+                    </div>
+                </div>
+                <!--                <div class="col-sm-8">-->
+                <!--                    <div class="page-header float-right">-->
+                <!--                        <div class="page-title">-->
+                <!--                            <ol class="breadcrumb text-right">-->
+                <!--                                <li><a href="#">Dashboard</a></li>-->
+                <!--                                <li><a href="#">Table</a></li>-->
+                <!--                                <li class="active">Data table</li>-->
+                <!--                            </ol>-->
+                <!--                        </div>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+
+        <div class="animated fadeIn">
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong class="card-title">Редактирование карточки организации</strong>
+                        </div>
+                        <div class="card-body card-block">
+                            <form id="saveOrganization"
+                                  th:action="(${organization.id} == null) ? '/organization' : '/organization/' + ${organization.id}"
+                                  method="put" class="">
+
+                                <div class="row form-group">
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-short-name"
+                                                                       class=" form-control-label">Корткое наименование
+                                            организации</label><input type="text" id="organization-short-name"
+                                                                      placeholder="Корткое наименование организации"
+                                                                      th:value="${organization?.shortName}"
+                                                                      class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-name"
+                                                                       class=" form-control-label">Полное наименование
+                                            организации</label><input type="text" id="organization-name"
+                                                                      placeholder="Полное наименование организации"
+                                                                      th:value="${organization?.name}"
+                                                                      class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-opf"
+                                                                       class=" form-control-label">Организационно-правовая
+                                            форма организации</label><input type="text" id="organization-opf"
+                                                                            placeholder="Организационно-правовая форма организации"
+                                                                            th:value="${organization?.organizationOPF}"
+                                                                            class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-type"
+                                                                       class=" form-control-label">Тип
+                                            организации</label><input type="text" id="organization-type"
+                                                                      placeholder="Тип организации"
+                                                                      th:value="${organization?.organizationType}"
+                                                                      class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-ogrn"
+                                                                       class=" form-control-label">ОГРН</label><input
+                                                type="text" id="organization-ogrn" placeholder="ОГРН"
+                                                th:value="${organization?.ogrn}" class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-inn"
+                                                                       class=" form-control-label">ИНН</label><input
+                                                type="text" id="organization-inn" placeholder="ИНН"
+                                                th:value="${organization?.inn}" class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-activity-started-at"
+                                                                       class=" form-control-label">Дата начала
+                                            деятельности</label><input type="date" id="organization-activity-started-at"
+                                                                       placeholder="Дата начала деятельности"
+                                                                       th:value="${#dates.format(organization?.activityStartedAt, 'yyyy-MM-dd')}"
+                                                                       class="form-control"></div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group"><label for="organization-activity-finished-at"
+                                                                       class=" form-control-label">Дата окончания
+                                            деятельности</label><input type="date"
+                                                                       id="organization-activity-finished-at"
+                                                                       placeholder="Дата окончания деятельности"
+                                                                       th:value="${#dates.format(organization?.activityFinishedAt, 'yyyy-MM-dd')}"
+                                                                       class="form-control"></div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <div class="col-lg-6">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <strong class="card-title">Печати организации</strong>
+                                            </div>
+                                            <div class="table-stats order-table ov-h">
+                                                <table class="table ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="serial">#</th>
+                                                        <th>Изображение</th>
+                                                        <th>Дата начала действия</th>
+                                                        <th>Дата окончания действия</th>
+                                                        <th></th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <th:block if="${organization.id} != null">
+                                                        <th:block th:each="stamp,state : ${organization.stampList}">
+                                                            <tr class="stamp-row">
+                                                                <td class="serial" th:text="${state.count}">1</td>
+                                                                <td>
+                                                                    <div id="image-preview"
+                                                                         th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                         class="image-preview">
+                                                                        <input type="hidden" th:value="${stamp?.link}"
+                                                                               class="stamp-link form-control form-upload-img">
+                                                                        <label for="image-upload" id="image-label"
+                                                                               th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                               class="image-label">Выберите
+                                                                            изображение</label>
+                                                                        <input type="file" name="image"
+                                                                               id="image-upload"
+                                                                               th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                               class="image-upload"/>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="date" id="stamp-activity-started-at"
+                                                                           th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                           placeholder="Дата начала действия"
+                                                                           th:value="${#dates.format(stamp?.activityStartedAt, 'yyyy-MM-dd')}"
+                                                                           class="stamp-activity-started-at form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="date" id="stamp-activity-finished-at"
+                                                                           th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                           placeholder="Дата окончания действия"
+                                                                           th:value="${#dates.format(stamp?.activityFinishedAt, 'yyyy-MM-dd')}"
+                                                                           class="stamp-activity-finished-at form-control">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="hidden" id="stamp-id"
+                                                                           th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                           placeholder="id" th:value="${stamp?.id}"
+                                                                           class="stamp-id form-control">
+                                                                    <button type="button"
+                                                                            th:attr="data-stamp-id=${stamp.id}"
+                                                                            class="stamp-delete row-delete btn btn-sm btn-danger">
+                                                                        <i
+                                                                                class="fa fa-exclamation"></i>&nbsp;
+                                                                        <span th:text="Удалить"></span>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </th:block>
+                                                    </th:block>
+                                                    <tr class="row-template">
+                                                        <td class="serial">1</td>
+                                                        <td>
+                                                            <div class="image-preview">
+                                                                <input type="hidden"
+                                                                       class="stamp-link form-control form-upload-img">
+                                                                <label class="image-label">Выберите изображение</label>
+                                                                <input type="file" name="image" class="image-upload"/>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" placeholder="Дата начала действия"
+                                                                   th:value="${#dates.format(stamp?.activityStartedAt, 'yyyy-MM-dd')}"
+                                                                   class="stamp-activity-started-at form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" placeholder="Дата окончания действия"
+                                                                   th:value="${#dates.format(stamp?.activityFinishedAt, 'yyyy-MM-dd')}"
+                                                                   class="stamp-activity-finished-at form-control">
+                                                        </td>
+                                                        <td>
+                                                            <button type="button"
+                                                                    class="stamp-delete row-delete btn btn-sm btn-danger">
+                                                                <i
+                                                                        class="fa fa-exclamation"></i>&nbsp;
+                                                                <span th:text="Удалить"></span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="5" style="text-align: left;">
+                                                            <button type="button"
+                                                                    class="stamp-add btn btn-sm btn-success"><i
+                                                                    class="fa fa-plus"></i>&nbsp;
+                                                                <span th:text="Добавить"></span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div> <!-- /.table-stats -->
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row form-group">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <strong class="card-title">Должностные лица организации</strong>
+                                        </div>
+                                        <div class="table-stats order-table ov-h">
+                                            <table class="table ">
+                                                <thead>
+                                                <tr>
+                                                    <th class="serial">#</th>
+                                                    <th>Должностное лицо</th>
+                                                    <th>Должность</th>
+                                                    <th>Тип документа о назначении</th>
+                                                    <th>Номер документа о назначении</th>
+                                                    <th>Дата документа о назначении</th>
+                                                    <th>Дата начала полномочий</th>
+                                                    <th>Дата окончания полномочий</th>
+                                                    <th>Документы</th>
+                                                    <th></th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <th:block if="${organization.id} != null">
+                                                    <th:block
+                                                            th:each="organizationDelegate,state : ${organization.organizationDelegateList}">
+                                                        <tr class="od-row">
+                                                            <td class="serial" th:text="${state.count}">1</td>
+                                                            <td>
+                                                                <select class="delegate-select form-control select-box od-delegate-id">
+                                                                    <option th:value="${organizationDelegate?.delegate.id}"
+                                                                            th:text="${organizationDelegate?.delegate.surname} + ' ' + ${organizationDelegate?.delegate.name} + ' ' + ${organizationDelegate?.delegate.middleName}"
+                                                                            selected="selected"></option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" id="od-position"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Должность"
+                                                                       th:value="${organizationDelegate?.position}"
+                                                                       class="od-position form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" id="od-order-document-type"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Тип документа о назначении"
+                                                                       th:value="${organizationDelegate?.orderDocumentType}"
+                                                                       class="od-order-document-type form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" id="od-order-document-num"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Номер документа о назначении"
+                                                                       th:value="${organizationDelegate?.orderDocumentNum}"
+                                                                       class="od-order-document-num form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="date" id="od-order-document-date"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Дата документа о назначении"
+                                                                       th:value="${#dates.format(organizationDelegate?.orderDocumentDate, 'yyyy-MM-dd')}"
+                                                                       class="od-order-document-date form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="date" id="od-activity-started-at"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Дата начала полномочий"
+                                                                       th:value="${#dates.format(organizationDelegate?.activityStartedAt, 'yyyy-MM-dd')}"
+                                                                       class="od-activity-started-at form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="date" id="od-activity-finished-at"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="Дата окончания полномочий"
+                                                                       th:value="${#dates.format(organizationDelegate?.activityFinishedAt, 'yyyy-MM-dd')}"
+                                                                       class="od-activity-finished-at form-control">
+                                                            </td>
+                                                            <td class="od-document-ids" data-toggle="modal" data-target="#scrollmodal-doctype">
+                                                                <ul>
+                                                                    <th:block
+                                                                            th:each="docType : ${organizationDelegate?.documentTypeList}">
+                                                                        <li class="document-select-item"
+                                                                            th:attr="data-doc-id=${docType?.id}"
+                                                                            th:text="${docType?.name}"></li>
+                                                                    </th:block>
+                                                                </ul>
+                                                            </td>
+                                                            <td>
+                                                                <input type="hidden" id="od-id"
+                                                                       th:attrappend="id=${#strings.randomAlphanumeric(10)}"
+                                                                       placeholder="id"
+                                                                       th:value="${organizationDelegate?.id}"
+                                                                       class="od-id form-control">
+                                                                <button type="button"
+                                                                        th:attr="data-stamp-id=${organizationDelegate?.id}"
+                                                                        class="od-delete row-delete btn btn-sm btn-danger">
+                                                                    <i
+                                                                            class="fa fa-exclamation"></i>&nbsp;
+                                                                    <span th:text="Удалить"></span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </th:block>
+                                                </th:block>
+                                                <tr class="row-template">
+                                                    <td class="serial"></td>
+                                                    <td>
+                                                        <select class="form-control select-box od-delegate-id">
+                                                            <option></option>
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" placeholder="Должность"
+                                                               class="od-position form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" placeholder="Тип документа о назначении"
+                                                               class="od-order-document-type form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" placeholder="Номер документа о назначении"
+                                                               class="od-order-document-num form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input type="date" placeholder="Дата документа о назначении"
+                                                               class="od-order-document-date form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input type="date" placeholder="Дата начала полномочий"
+                                                               class="od-activity-started-at form-control">
+                                                    </td>
+                                                    <td>
+                                                        <input type="date" placeholder="Дата окончания полномочий"
+                                                               class="od-activity-finished-at form-control">
+                                                    </td>
+                                                    <td class="od-document-ids" data-toggle="modal" data-target="#scrollmodal-doctype">
+                                                        <ul>
+                                                        </ul>
+                                                    </td>
+                                                    <td>
+                                                        <input type="hidden" placeholder="id"
+                                                               class="od-id form-control">
+                                                        <button type="button"
+                                                                class="od-delete row-delete btn btn-sm btn-danger"><i
+                                                                class="fa fa-exclamation"></i>&nbsp;
+                                                            <span th:text="Удалить"></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="5" style="text-align: left;">
+                                                        <button type="button" class="od-add btn btn-sm btn-success"><i
+                                                                class="fa fa-plus"></i>&nbsp;
+                                                            <span th:text="Добавить"></span>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div> <!-- /.table-stats -->
+                                    </div>
+                                </div>
+                                <div class="form-actions form-group">
+                                    <button type="submit" class="btn btn-success btn-sm save-button">
+                                        <i class="fa"></i>&nbsp;Сохранить
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div><!-- .animated -->
+    </div>
+
+    <div class="modal" id="scrollmodal-doctype" tabindex="-1" role="dialog" aria-labelledby="scrollmodalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="scrollmodalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                        <th></th>
+                        <th>Название документа</th>
+                        <th>НПА</th>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="docType : ${docTypes}">
+                            <tr>
+                                <td>
+                                    <input type="checkbox" class="doc-type-check"
+                                           th:attr="data-doc-id=${docType.id},data-doc-name=${docType.name}">
+                                </td>
+                                <td th:text="${docType.name}"></td>
+                                <td th:text="${docType.documentCategory.npa}"></td>
+                            </tr>
+                        </th:block>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary save-doc-list">Применить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+    <footer th:replace="menu::footer"></footer>
+</div>
+
+
+<div th:replace="template::scripts (${scriptsVersion})"></div>
+<script src="/assets/js/external/jquery.uploadPreview.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+<script src="/assets/js/organization.js"></script>
+
+</body>
+</html>

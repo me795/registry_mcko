@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.mcko.registry.repository.read.StampRepositoryRead">
+
+
+    <resultMap id="stampMap" type="ru.mcko.registry.entity.Stamp">
+        <id column="stamp_id" property="id"/>
+        <result column="stamp_link" property="link"/>
+        <result column="stamp_activity_started_at" property="activityStartedAt"/>
+        <result column="stamp_activity_finished_at" property="activityFinishedAt"/>
+        <result column="stamp_created_at" property="createdAt"/>
+        <result column="stamp_updated_at" property="updatedAt"/>
+        <result column="stamp_deleted_at" property="deletedAt"/>
+    </resultMap>
+
+
+    <select id="listByOrganization" resultMap="stampMap">
+        SELECT stamps.id                   AS stamp_id,
+               stamps.stamp_link           AS stamp_link,
+               stamps.activity_started_at  AS stamp_activity_started_at,
+               stamps.activity_finished_at AS stamp_activity_finished_at,
+               stamps.created_at           AS stamp_created_at,
+               stamps.updated_at           AS stamp_updated_at,
+               stamps.deleted_at           AS stamp_deleted_at
+        FROM stamps
+        WHERE 1 = 1
+          AND stamps.organization_id = #{stampId};
+    </select>
+
+    <select id="listActiveByOrganization" resultMap="stampMap">
+        SELECT stamps.id                   AS stamp_id,
+               stamps.stamp_link           AS stamp_link,
+               stamps.activity_started_at  AS stamp_activity_started_at,
+               stamps.activity_finished_at AS stamp_activity_finished_at,
+               stamps.created_at           AS stamp_created_at,
+               stamps.updated_at           AS stamp_updated_at,
+               stamps.deleted_at           AS stamp_deleted_at
+        FROM stamps
+        WHERE 1 = 1
+          AND stamps.organization_id = #{stampId}
+          AND deleted_at IS NULL;
+    </select>
+
+    <select id="getById" resultMap="stampMap">
+        SELECT stamps.id                   AS stamp_id,
+               stamps.stamp_link           AS stamp_link,
+               stamps.activity_started_at  AS stamp_activity_started_at,
+               stamps.activity_finished_at AS stamp_activity_finished_at,
+               stamps.created_at           AS stamp_created_at,
+               stamps.updated_at           AS stamp_updated_at,
+               stamps.deleted_at           AS stamp_deleted_at
+        FROM stamps
+        WHERE 1 = 1
+          AND stamps.id = #{id};
+    </select>
+
+
+</mapper>

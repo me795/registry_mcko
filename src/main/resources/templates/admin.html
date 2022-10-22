@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" content="text/html;" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="template::header (${scriptsVersion})"></head>
+<body>
+
+            <th:block th:if="${#request.userPrincipal != null}">
+                <form id="logoutForm" method="POST" action="logout">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+
+                <h2>Welcome to admin_panel <th:block th:text="${#request.userPrincipal.name}"></th:block> | <a
+                        onclick="document.forms['logoutForm'].submit()">Logout</a>
+                </h2>
+
+<!--                <a th:href="@{/logout}">Logout</a>-->
+            </th:block>
+
+
+
+</body>
+</html>

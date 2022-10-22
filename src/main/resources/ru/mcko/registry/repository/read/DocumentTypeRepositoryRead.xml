@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ru.mcko.registry.repository.read.DocumentTypeRepositoryRead">
+
+    <resultMap id="docTypeMap" type="ru.mcko.registry.entity.DocumentType">
+        <id column="dt_id" property="id" />
+        <result column="dt_name" property="name"/>
+        <result column="dt_created_at" property="createdAt" />
+        <result column="dt_updated_at" property="updatedAt" />
+        <result column="dt_deleted_at" property="deletedAt" />
+        <association property="documentCategory" resultMap="docCategoryMap" />
+    </resultMap>
+
+    <resultMap id="docCategoryMap" type="ru.mcko.registry.entity.DocumentCategory">
+        <id column="dc_id" property="id" />
+        <result column="dc_name" property="name"/>
+        <result column="dc_npa" property="npa"/>
+        <result column="dc_created_at" property="createdAt" />
+        <result column="dc_updated_at" property="updatedAt" />
+        <result column="dc_deleted_at" property="deletedAt" />
+    </resultMap>
+
+
+    <select id="listByName" resultMap="docTypeMap">
+        SELECT
+            document_type.id AS dt_id,
+            document_type.name AS dt_name,
+            document_type.created_at AS dt_created_at,
+            document_type.updated_at AS dt_updated_at,
+            document_type.deleted_at AS dt_deleted_at,
+            document_category.id AS dc_id,
+            document_category.name AS dc_name,
+            document_category.npa AS dc_npa,
+            document_category.created_at AS dc_created_at,
+            document_category.updated_at AS dc_updated_at,
+            document_category.deleted_at AS dc_deleted_at
+        FROM
+            document_type
+                LEFT JOIN document_category ON document_type.document_category_id = document_category.id
+        WHERE 1=1
+          AND document_type.deleted_at IS NULL
+          AND document_category.deleted_at IS NULL
+          AND lower(document_type.name) LIKE #{searchValue};
+    </select>
+
+    <select id="listAll" resultMap="docTypeMap">
+        SELECT
+            document_type.id AS dt_id,
+            document_type.name AS dt_name,
+            document_type.created_at AS dt_created_at,
+            document_type.updated_at AS dt_updated_at,
+            document_type.deleted_at AS dt_deleted_at,
+            document_category.id AS dc_id,
+            document_category.name AS dc_name,
+            document_category.npa AS dc_npa,
+            document_category.created_at AS dc_created_at,
+            document_category.updated_at AS dc_updated_at,
+            document_category.deleted_at AS dc_deleted_at
+        FROM
+            document_type
+            LEFT JOIN document_category ON document_type.document_category_id = document_category.id
+        WHERE 1=1
+            AND document_type.deleted_at IS NULL
+            AND document_category.deleted_at IS NULL;
+    </select>
+
+    <select id="listByOrganizationDelegate" resultMap="docTypeMap">
+        SELECT
+            document_type.id AS dt_id,
+            document_type.name AS dt_name,
+            document_type.created_at AS dt_created_at,
+            document_type.updated_at AS dt_updated_at,
+            document_type.deleted_at AS dt_deleted_at,
+            document_category.id AS dc_id,
+            document_category.name AS dc_name,
+            document_category.npa AS dc_npa,
+            document_category.created_at AS dc_created_at,
+            document_category.updated_at AS dc_updated_at,
+            document_category.deleted_at AS dc_deleted_at
+        FROM
+            organization_delegate_document_type
+            LEFT JOIN document_type
+                ON organization_delegate_document_type.document_type_id = document_type.id
+            LEFT JOIN document_category ON document_type.document_category_id = document_category.id
+        WHERE 1=1
+          AND organization_delegate_document_type.organization_delegate_id = #{organizationDelegateId};
+    </select>
+
+</mapper>

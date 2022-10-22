@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.mcko.registry.repository.write.OrganizationDelegateRepositoryWrite">
+
+    <select id="create" parameterType="ru.mcko.registry.entity.OrganizationDelegate" resultType="java.lang.Integer">
+        insert into organization_delegate (organization_id, delegate_id, "position", order_document_type,
+                                           order_document_num, order_document_date, activity_started_at, activity_finished_at,
+                                           created_at)
+        values (#{organizationId}, #{delegate.id}, #{position},
+                #{orderDocumentType}, #{orderDocumentNum}, #{orderDocumentDate},
+                #{activityStartedAt}, #{activityFinishedAt},NOW()) RETURNING id;
+
+
+    </select>
+
+    <update id="update" parameterType="ru.mcko.registry.entity.OrganizationDelegate">
+        update organization_delegate
+        set
+        position = #{position},
+            organization_id = #{organizationId},
+            order_document_type = #{orderDocumentType},
+            order_document_num = #{orderDocumentNum},
+            order_document_date = #{orderDocumentDate},
+            activity_started_at = #{activityStartedAt},
+            <if test="activityFinishedAt != null">
+                activity_finished_at = #{activityFinishedAt},
+            </if>
+            updated_at = NOW()
+        where 1 = 1
+          and id = #{id};
+    </update>
+
+    <delete id="delete">
+        update organization_delegate
+        set
+            deleted_at = NOW()
+        WHERE 1 = 1
+          AND id = #{organizationDelegateId}
+    </delete>
+
+    <delete id="deleteAllByOrganization">
+        update organization_delegate
+        set
+            deleted_at = NOW()
+        WHERE 1 = 1
+          AND organization_id = #{organizationId}
+    </delete>
+
+    <insert id="addDocumentType">
+        INSERT INTO organization_delegate_document_type (organization_delegate_id, document_type_id)
+        VALUES (#{organizationDelegateId}, #{documentTypeId});
+    </insert>
+
+    <delete id="deleteDocumentType">
+        DELETE
+        FROM organization_delegate_document_type
+        WHERE 1 = 1
+          AND organization_delegate_id = #{organizationDelegateId}
+          AND document_type_id = #{documentTypeId};
+    </delete>
+
+    <delete id="deleteAllDocumentType">
+        DELETE
+        FROM organization_delegate_document_type
+        WHERE 1 = 1
+          AND organization_delegate_id = #{organizationDelegateId};
+    </delete>
+
+</mapper>
