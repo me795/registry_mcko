@@ -174,11 +174,39 @@
                                                                             class="stamp-delete row-delete btn btn-sm btn-danger">
                                                                         <i
                                                                                 class="fa fa-exclamation"></i>&nbsp;
-                                                                        <span th:text="Удалить"></span>
+                                                                        <span>Удалить</span>
                                                                     </button>
                                                                 </td>
                                                             </tr>
                                                         </th:block>
+                                                    </th:block>
+                                                    <th:block th:if="${organization.id} == null">
+                                                        <tr class="row-stamp">
+                                                            <td class="serial">1</td>
+                                                            <td>
+                                                                <div class="image-preview">
+                                                                    <input type="hidden"
+                                                                           class="stamp-link form-control form-upload-img">
+                                                                    <label class="image-label">Выберите изображение</label>
+                                                                    <input type="file" name="image" class="image-upload"/>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <input type="date" placeholder="Дата начала действия"
+                                                                       class="stamp-activity-started-at form-control">
+                                                            </td>
+                                                            <td>
+                                                                <input type="date" placeholder="Дата окончания действия"
+                                                                       class="stamp-activity-finished-at form-control">
+                                                            </td>
+                                                            <td>
+                                                                <button type="button"
+                                                                        class="stamp-delete row-delete btn btn-sm btn-danger">
+                                                                    <i class="fa fa-exclamation"></i>&nbsp;
+                                                                    <span>Удалить</span>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
                                                     </th:block>
                                                     <tr class="row-template">
                                                         <td class="serial">1</td>
@@ -192,20 +220,17 @@
                                                         </td>
                                                         <td>
                                                             <input type="date" placeholder="Дата начала действия"
-                                                                   th:value="${#dates.format(stamp?.activityStartedAt, 'yyyy-MM-dd')}"
                                                                    class="stamp-activity-started-at form-control">
                                                         </td>
                                                         <td>
                                                             <input type="date" placeholder="Дата окончания действия"
-                                                                   th:value="${#dates.format(stamp?.activityFinishedAt, 'yyyy-MM-dd')}"
                                                                    class="stamp-activity-finished-at form-control">
                                                         </td>
                                                         <td>
                                                             <button type="button"
                                                                     class="stamp-delete row-delete btn btn-sm btn-danger">
-                                                                <i
-                                                                        class="fa fa-exclamation"></i>&nbsp;
-                                                                <span th:text="Удалить"></span>
+                                                                <i class="fa fa-exclamation"></i>&nbsp;
+                                                                <span>Удалить</span>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -214,7 +239,7 @@
                                                             <button type="button"
                                                                     class="stamp-add btn btn-sm btn-success"><i
                                                                     class="fa fa-plus"></i>&nbsp;
-                                                                <span th:text="Добавить"></span>
+                                                                <span>Добавить</span>
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -323,11 +348,56 @@
                                                                         class="od-delete row-delete btn btn-sm btn-danger">
                                                                     <i
                                                                             class="fa fa-exclamation"></i>&nbsp;
-                                                                    <span th:text="Удалить"></span>
+                                                                    <span>Удалить</span>
                                                                 </button>
                                                             </td>
                                                         </tr>
                                                     </th:block>
+                                                </th:block>
+                                                <th:block th:if="${organization.id} == null">
+                                                    <tr  class="od-row">
+                                                        <td class="serial">1</td>
+                                                        <td>
+                                                            <select class="delegate-select form-control select-box od-delegate-id">
+                                                                <option></option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="Должность"
+                                                                   class="od-position form-control" value="директор">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="Тип документа о назначении"
+                                                                   class="od-order-document-type form-control" value="приказ">
+                                                        </td>
+                                                        <td>
+                                                            <input type="text" placeholder="Номер документа о назначении"
+                                                                   class="od-order-document-num form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" placeholder="Дата документа о назначении"
+                                                                   class="od-order-document-date form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" placeholder="Дата начала полномочий"
+                                                                   class="od-activity-started-at form-control">
+                                                        </td>
+                                                        <td>
+                                                            <input type="date" placeholder="Дата окончания полномочий"
+                                                                   class="od-activity-finished-at form-control">
+                                                        </td>
+                                                        <td class="od-document-ids" data-toggle="modal" data-target="#scrollmodal-doctype">
+                                                            <ul>
+                                                            </ul>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button"
+                                                                    class="od-delete row-delete btn btn-sm btn-danger"><i
+                                                                    class="fa fa-exclamation"></i>&nbsp;
+                                                                <span>Удалить</span>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                 </th:block>
                                                 <tr class="row-template">
                                                     <td class="serial"></td>
@@ -338,11 +408,11 @@
                                                     </td>
                                                     <td>
                                                         <input type="text" placeholder="Должность"
-                                                               class="od-position form-control">
+                                                               class="od-position form-control"  value="директор">
                                                     </td>
                                                     <td>
                                                         <input type="text" placeholder="Тип документа о назначении"
-                                                               class="od-order-document-type form-control">
+                                                               class="od-order-document-type form-control"  value="приказ">
                                                     </td>
                                                     <td>
                                                         <input type="text" placeholder="Номер документа о назначении"
@@ -365,12 +435,10 @@
                                                         </ul>
                                                     </td>
                                                     <td>
-                                                        <input type="hidden" placeholder="id"
-                                                               class="od-id form-control">
                                                         <button type="button"
                                                                 class="od-delete row-delete btn btn-sm btn-danger"><i
                                                                 class="fa fa-exclamation"></i>&nbsp;
-                                                            <span th:text="Удалить"></span>
+                                                            <span>Удалить</span>
                                                         </button>
                                                     </td>
                                                 </tr>
@@ -378,7 +446,7 @@
                                                     <td colspan="5" style="text-align: left;">
                                                         <button type="button" class="od-add btn btn-sm btn-success"><i
                                                                 class="fa fa-plus"></i>&nbsp;
-                                                            <span th:text="Добавить"></span>
+                                                            <span>Добавить</span>
                                                         </button>
                                                     </td>
                                                 </tr>

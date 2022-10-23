@@ -312,7 +312,7 @@
         <if test="params.date != null">
             AND #{params.date} BETWEEN stamps.activity_started_at AND stamps.activity_finished_at
         </if>
-        ORDER BY organizations.activity_started_at, stamps.activity_started_at, organization_delegate.activity_started_at;
+        ORDER BY organizations.activity_started_at, stamps.activity_started_at, organization_delegate.activity_started_at
         LIMIT 50;
     </select>
 
